@@ -22,7 +22,7 @@ Misc::snakeCase('aze ert uUu . tt.oo__aa//jjj;içp');
 ```
 
 # Others
-### 🔖 Packagist
+##### 🔖 Packagist
 https://packagist.org/packages/padcmoi/bundle-api-slim
 
 ##### 🔖 Licence
