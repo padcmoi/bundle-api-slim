@@ -12,6 +12,7 @@ composer require padcmoi/bundle-api-slim
 - ✔️ SanitizeData
 - ✔️ JWT Auth
 - ✔️ CSRF
+- ✔️ Captcha
 - ✔️ Misc
 - ✔️ ...
 
