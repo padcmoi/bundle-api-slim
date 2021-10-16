@@ -5,6 +5,28 @@ namespace Padcmoi\BundleApiSlim\Misc;
 trait StringFormatter
 {
     /**
+     * Formatter au format slugify
+     * @param {String}
+     *
+     * @return {String}
+     */
+    public static function slugify($string)
+    {
+        return self::stringFormatter($string, '-', true);
+    }
+
+    /**
+     * Formatter au format snake case
+     * @param {String}
+     *
+     * @return {String}
+     */
+    public static function snakeCase($string)
+    {
+        return self::stringFormatter($string, '_', true);
+    }
+
+    /**
      * Formatte un champ contenant des espaces en séparant avec un caractère
      * optionnel: possible de ne pas changer en minuscules
      *
@@ -26,4 +48,5 @@ trait StringFormatter
         setlocale(LC_ALL, $oldLocale);
         return $clean;
     }
+
 }
