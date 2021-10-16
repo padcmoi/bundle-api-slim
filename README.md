@@ -1,12 +1,13 @@
-# bundle-api-slim
+# Bundle API Slim or others
 Pack de Class utilitaires pour la création d'une API sur SLIM
 
-# 🔖 Install
+# ➡️Install
 ```
 composer require padcmoi/bundle-api-slim
 ```
 
-# 🔖 Usage
+# ➡️Usage
+Exemple
 ```php
 use Padcmoi\BundleApiSlim\Misc;
 use Padcmoi\BundleApiSlim\SanitizeData;
@@ -21,15 +22,15 @@ SanitizeData::clean(true, []);
 Misc::snakeCase('aze ert uUu . tt.oo__aa//jjj;içp');
 ```
 
-# Others
-##### 🔖 Packagist
+# ➡️Others
+##### 🧳Packagist
 https://packagist.org/packages/padcmoi/bundle-api-slim
 
-##### 🔖 Licence
+##### 🔖Licence
 Ce travail est sous licence [MIT](/LICENSE).
 
-##### 🔥 Pour me contacter sur discord
+##### 🔥Pour me contacter sur discord
 Lien discord [discord.gg/257rUb9](https://discord.gg/257rUb9)
 
-##### 🍺 Si vous souhaitez m’offrir une bière
-😍 Me faire un don [par Paypal](https://www.paypal.com/paypalme/Julien06100?locale.x=fr_FR)
+##### 🍺Si vous souhaitez m’offrir une bière
+Me faire un don 😍 [par Paypal](https://www.paypal.com/paypalme/Julien06100?locale.x=fr_FR)
