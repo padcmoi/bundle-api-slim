@@ -45,4 +45,15 @@ class Misc
         return self::stringFormatter($string, '-', true);
     }
 
+    /**
+     * Formatter au format snake case
+     * @param {String}
+     *
+     * @return {String}
+     */
+    public static function snakeCase($string)
+    {
+        return self::stringFormatter($string, '_', true);
+    }
+
 }
