@@ -18,6 +18,7 @@ composer require padcmoi/bundle-api-slim
 # ➡️Usage
 ***Exemple***
 ```php
+use Padcmoi\BundleApiSlim\Database;
 use Padcmoi\BundleApiSlim\Misc;
 use Padcmoi\BundleApiSlim\SanitizeData;
 use Padcmoi\BundleApiSlim\Token\JwtToken;
