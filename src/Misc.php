@@ -4,6 +4,7 @@ namespace Padcmoi\BundleApiSlim;
 
 class Misc
 {
+    use Misc\StringFormatter;
 
     /**
      * Retourne la véritable adresse IP de l'utilisateur.
@@ -31,6 +32,17 @@ class Misc
     public static function getFullUrl()
     {
         return $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . $_SERVER['SCRIPT_NAME'];
+    }
+
+    /**
+     * Formatter au format slugify
+     * @param {String}
+     *
+     * @return {String}
+     */
+    public static function slugify($string)
+    {
+        return self::stringFormatter($string, '-', true);
     }
 
 }
