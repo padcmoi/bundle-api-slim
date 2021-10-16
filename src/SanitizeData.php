@@ -50,7 +50,21 @@ class SanitizeData
     }
 
     /**
-     * Traite les champs envoyés par le client et nettoie.
+     * Nettoie un champ avec tous les filtres ou en ignorant quelques filtres
+     *
+     * @param {String}
+     * @param {Array}
+     *
+     * @return {String}
+     */
+    public static function cleanIt(string $string, array $IGNORE_FILTER = [])
+    {
+        self::$IGNORE_FILTER = $IGNORE_FILTER;
+        return self::sanitize($string);
+    }
+
+    /**
+     * Traite un champ envoyé par le client et nettoie.
      *
      * @param {String} $string - Texte à nettoyer.
      *
