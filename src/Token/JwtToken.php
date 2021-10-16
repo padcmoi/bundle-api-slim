@@ -36,7 +36,7 @@ class JwtToken
 
         $expire = isset($_ENV['JWT_EXPIRE']) ? intval($_ENV['JWT_EXPIRE']) : intval(self::EXPIRE);
         Database::delete(
-            "DELETE FROM `token` WHERE `header` = 'jwt' AND TIME_TO_SEC( TIMEDIFF(CURRENT_TIMESTAMP() , `expire_at`) ) > :exp",
+            "DELETE FROM `__tokens` WHERE `header` = 'jwt' AND TIME_TO_SEC( TIMEDIFF(CURRENT_TIMESTAMP() , `expire_at`) ) > :exp",
             array(":exp" => $expire)
         );
     }
@@ -67,7 +67,7 @@ class JwtToken
         ]);
 
         $lastInsertId = Database::insert(
-            "INSERT INTO `token` SET
+            "INSERT INTO `__tokens` SET
                 `payload` = md5(:payload),
                 `header` = 'jwt',
                 `uid` = :uid,
@@ -137,7 +137,7 @@ class JwtToken
         $add_nbf = $checkNbf ? ' AND TIME_TO_SEC( TIMEDIFF(CURRENT_TIMESTAMP() , `not_before_renew `) ) > 0 ' : '';
 
         $result = Database::rowCount(
-            "SELECT * FROM `token` WHERE
+            "SELECT * FROM `__tokens` WHERE
                 `payload` = MD5(:payload) AND
                 `header` = 'jwt' AND
                 TIME_TO_SEC( TIMEDIFF(CURRENT_TIMESTAMP() , `expire_at`) ) < 0

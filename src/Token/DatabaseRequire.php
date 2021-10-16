@@ -16,7 +16,7 @@ class DatabaseRequire
         $db = Database::request();
 
         $db->query("
-        CREATE TABLE IF NOT EXISTS `token` (
+        CREATE TABLE IF NOT EXISTS `__tokens` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `header` enum('jwt','csrf') NOT NULL,
             `payload` varchar(300) NOT NULL,
