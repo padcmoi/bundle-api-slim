@@ -18,4 +18,16 @@ trait EncodeHash
     {
         return str_replace(['+', '/', '=', '.'], '', base64_encode($url));
     }
+
+    /**
+     * Vérifie si c'est un hash SHA1
+     * @param {String}
+     *
+     * @return {Boolean}
+     */
+    public static function isSha1($str)
+    {
+        return (bool) preg_match('/^[0-9a-f]{40}$/i', $str);
+    }
+
 }
