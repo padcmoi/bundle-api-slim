@@ -26,7 +26,7 @@ use Padcmoi\BundleApiSlim\Token\JwtToken;
 
 // database
 $lastInsertId = Database::insert(
-    "INSERT INTO `token` SET
+    "INSERT INTO `__tokens` SET
         `payload` = md5(:payload),
         `header` = 'jwt',
         `uid` = :uid,
