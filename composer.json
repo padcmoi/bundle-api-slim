@@ -1,0 +1,19 @@
+{
+    "name": "padcmoi/bundle-api-slim",
+    "description": "Pack de Class utilitaires pour la création d'une API sur SLIM",
+    "type": "library",
+    "keywords": ["slim", "api"],
+    "license": "MIT",
+    "authors": [{
+        "name": "Julien Jean",
+        "email": "juliennaskot@gmail.com"
+    }],
+    "require": {
+        "php": "^7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Padcmoi\\BundleApiSlim\\": "src/"
+        }
+    }
+}
