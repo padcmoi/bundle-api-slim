@@ -180,4 +180,22 @@ class SimplyCaptcha
 
         return $result;
     }
+
+    /**
+     * Retourne un captcha en base64 ou retourne false si aucun captcha trouvé
+     *
+     * @return {String/Boolean}
+     */
+    public static function get()
+    {
+        self::dbStructure();
+        self::dbPurge();
+
+        $select = Database::fetchAll(
+            "SELECT `picture` FROM `__simply_captcha` WHERE `remote_ip` = :remote_ip LIMIT 1",
+            array(':remote_ip' => Misc::getIP())
+        );
+
+        return !$select ? false : $select[0]['picture'];
+    }
 }
