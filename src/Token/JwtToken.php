@@ -134,7 +134,7 @@ class JwtToken
     {
         self::purge(); // On purge avant les jetons expirés
 
-        $add_nbf = $checkNbf ? ' AND TIME_TO_SEC( TIMEDIFF(CURRENT_TIMESTAMP() , `not_before_renew `) ) > 0 ' : '';
+        $add_nbf = $checkNbf ? ' AND TIME_TO_SEC( TIMEDIFF(CURRENT_TIMESTAMP() , `not_before_renew`) ) > 0 ' : '';
 
         $result = Database::rowCount(
             "SELECT * FROM `__tokens` WHERE
