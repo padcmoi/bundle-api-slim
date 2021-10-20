@@ -70,6 +70,7 @@ class DotEnv
             "SHOW_ERRORS=0\n",
 
             "JWT_KEY='" . base64_encode(bin2hex(random_bytes(32))) . "'",
+            "JWT_ALGORITHM='HS512'",
             "JWT_EXPIRE=3600\n",
 
             "DB_HOSTNAME='localhost'",

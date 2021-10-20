@@ -2,27 +2,32 @@
 
 namespace Padcmoi\BundleApiSlim\Token;
 
-use Ahc\Jwt\JWT;
 use Padcmoi\BundleApiSlim\Database;
+use Padcmoi\BundleApiSlim\Token\SimplyJWT;
 
 class JwtToken
 {
     const EXPIRE = 3600;
 
     /**
-     * Créer une instance JWT
+     * Instance une seule fois SimplyJWT
      *
-     * @return {Object}
+     * @void
      */
-    protected static function instance()
+    private static $isInit = false;
+    protected static function init()
     {
-        if (isset($_ENV['JWT_KEY'])) {
-            $expire = isset($_ENV['JWT_EXPIRE']) ? intval($_ENV['JWT_EXPIRE']) : intval(self::EXPIRE);
-            $jwt = new JWT($_ENV['JWT_KEY'], 'HS256', $expire, 10);
-            return $jwt;
-        } else {
-            throw new \Exception('JWT KEY introuvable dans .env');
+        if (!self::$isInit) {
+            if (isset($_ENV['JWT_KEY'])) {
+                $expire = isset($_ENV['JWT_EXPIRE']) ? intval($_ENV['JWT_EXPIRE']) : intval(self::EXPIRE);
+                $alg = isset($_ENV['JWT_ALGORITHM']) ? $_ENV['JWT_ALGORITHM'] : 'HS512';
+                SimplyJWT::init($_ENV['JWT_KEY'], $alg, $expire);
+                self::$isInit = true;
+            } else {
+                throw new \Exception('JWT KEY introuvable dans .env');
+            }
         }
+
     }
 
     /**
@@ -52,12 +57,14 @@ class JwtToken
      */
     public static function create($uid = null)
     {
+
         DatabaseRequire::check();
 
         $expire = isset($_ENV['JWT_EXPIRE']) ? intval($_ENV['JWT_EXPIRE']) : intval(self::EXPIRE);
         $nbf = intval($expire - $expire * 25 / 100);
 
-        $serializedToken = self::instance()->encode([
+        self::init(); // Instanciation Singleton SimplyJWT
+        $serializedToken = SimplyJWT::encode([
             "iss" => $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'],
             "sub" => "access_token",
             "exp" => time() + $expire,
@@ -95,9 +102,7 @@ class JwtToken
     public static function tryRenew(string $serializedToken)
     {
         if (self::check($serializedToken, true)) {
-            $payload = self::getUid($serializedToken);
-            $uid = isset($payload['uid']) ? $payload['uid'] : null;
-            return self::create($uid);
+            return self::create(self::getUid($serializedToken));
         } else {
             return $serializedToken;
         }
@@ -112,8 +117,10 @@ class JwtToken
      */
     public static function getUid($serializedToken)
     {
+
         if (self::check($serializedToken)) {
-            $payload = self::instance()->decode($serializedToken);
+            self::init(); // Instanciation Singleton SimplyJWT
+            $payload = SimplyJWT::decode($serializedToken);
             return isset($payload['uid']) ? $payload['uid'] : -1;
         } else {
             return -1;
@@ -147,7 +154,9 @@ class JwtToken
         );
 
         if ($result >= 1) {
-            $payload = self::instance()->decode($serializedToken);
+
+            self::init(); // Instanciation Singleton SimplyJWT
+            $payload = SimplyJWT::decode($serializedToken);
 
             if (!isset($payload['sub']) || $payload['sub'] != 'access_token') {
                 // retourne http code car une manque une clé au payload et/ou son contenu
