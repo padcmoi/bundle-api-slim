@@ -10,6 +10,7 @@
     }],
     "require": {
         "php": "^7.2",
+        "padcmoi/simply-jwt": "^1.0",
         "vlucas/phpdotenv": "^5.3"
     },
     "autoload": {

@@ -3,7 +3,7 @@
 namespace Padcmoi\BundleApiSlim\Token;
 
 use Padcmoi\BundleApiSlim\Database;
-use Padcmoi\BundleApiSlim\Token\SimplyJWT;
+use Padcmoi\JWT\SimplyJWT;
 
 class JwtToken
 {
