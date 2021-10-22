@@ -3,7 +3,7 @@ namespace Padcmoi\BundleApiSlim\Token;
 
 class SimplyJWT
 {
-    private static $instance = null,
+    private static $init = false,
     $header = [
         'alg' => 'HS256',
         'typ' => 'JWT',
@@ -13,20 +13,16 @@ class SimplyJWT
     {}
 
     /**
-     * Instance en singleton la class
+     * Initialise/paramétrage
      *
      * @param {String} Clé privée
      * @param {String} Algorithme HS256, HS384, HS512
      * @param {Number} Expiration token
      *
-     * @return {class::instance}
+     * @void
      */
     public static function init(string $key, string $alg = 'HS256', int $expire = 3600)
     {
-        if (!self::$instance) {
-            self::$instance = new self();
-        }
-
         // définit la clé privée
         self::$key = $key;
         // définit l'algorithme
@@ -35,7 +31,7 @@ class SimplyJWT
         // définit la clé privée
         self::$expire = intval($expire);
 
-        return self::$instance;
+        self::$init = true;
     }
 
     /**
@@ -46,7 +42,7 @@ class SimplyJWT
      */
     public static function encode(array $payload = null)
     {
-        if (!self::$instance) {
+        if (!self::$init) {
             throw new \Exception("SimplyJWT::init() must be init", 1);
             exit;
         }
@@ -79,7 +75,7 @@ class SimplyJWT
      */
     public static function decode(string $serializedToken)
     {
-        if (!self::$instance) {
+        if (!self::$init) {
             throw new \Exception("SimplyJWT::init() must be init", 1);
             exit;
         }

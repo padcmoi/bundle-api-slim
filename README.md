@@ -46,6 +46,20 @@ SanitizeData::without(['ab', 'baa', 'aa']);
 SanitizeData::clean(true, []);
 
 Misc::snakeCase('aze ert uUu . tt.oo__aa//jjj;içp');
+
+
+// Use only JWT
+use Padcmoi\BundleApiSlim\Token\SimplyJWT;
+
+SimplyJWT::init('***PRIVATE_KEY***', 'HS256', 3600); // KEY, Algorithm, Expire Timestamp
+
+$serializedToken = SimplyJWT::encode([
+    "exp" => time() + 3600,
+    "iat" => time(),
+    "uid" => -1, // Id account
+]);
+
+$payload = SimplyJWT::decode($serializedToken); 
 ```
 
 # ➡️Others
