@@ -21,6 +21,7 @@ class DatabaseRequire
             `header` enum('jwt','csrf') NOT NULL,
             `payload` varchar(300) NOT NULL,
             `uid` int(11) DEFAULT NULL,
+            `ip` varchar(300) DEFAULT NULL,
             `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
             `not_before_renew` datetime NOT NULL DEFAULT '1970-01-01 00:00:00',
             `expire_at` datetime NOT NULL DEFAULT '1970-01-01 00:00:00',

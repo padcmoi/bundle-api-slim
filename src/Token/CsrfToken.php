@@ -3,9 +3,23 @@
 namespace Padcmoi\BundleApiSlim\Token;
 
 use Padcmoi\BundleApiSlim\Database;
+use Padcmoi\BundleApiSlim\Misc;
 
 class CsrfToken
 {
+    private static $WITH_CHECKIP = false;
+
+    /**
+     * Active la vérification d'IP
+     * @param {Boolean} false - désactive la vérification des IP
+     *
+     * @void
+     */
+    public static function checkIP(bool $payload = true)
+    {
+        self::$WITH_CHECKIP = $payload;
+    }
+
     /**
      * Purge les jetons obsolètes
      *
@@ -36,8 +50,9 @@ class CsrfToken
             "INSERT INTO `__tokens` SET
                 `payload` = :payload,
                 `header` = 'csrf',
+                `ip` = :ip,
                 `expire_at` = DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 900 SECOND)",
-            array(':payload' => $token)
+            array(':payload' => $token, ':ip' => self::$WITH_CHECKIP ? Misc::getIP() : 'unchecked_ip')
         );
 
         // A surveiller! Boucle de la mort probable ou a refactorer
@@ -61,8 +76,8 @@ class CsrfToken
 
         $rows_affected = Database::update(
             "UPDATE `__tokens` SET `expire_at` = DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 900 SECOND)
-            WHERE `header` = 'csrf' AND `payload` = :payload LIMIT 1",
-            array(":payload" => $token)
+            WHERE `header` = 'csrf' AND `payload` = :payload AND `ip` = :ip LIMIT 1",
+            array(':payload' => $token, ':ip' => self::$WITH_CHECKIP ? Misc::getIP() : 'unchecked_ip')
         );
 
         return $rows_affected >= 1 ? true : false;
@@ -81,10 +96,10 @@ class CsrfToken
 
         $rows_affected = Database::rowCount(
             "SELECT * FROM `__tokens` WHERE
-                `header` = 'csrf' AND `payload` = :payload AND
+                `header` = 'csrf' AND `payload` = :payload AND `ip` = :ip AND
                 TIME_TO_SEC( TIMEDIFF(CURRENT_TIMESTAMP() , `expire_at`) ) < 0
                 LIMIT 1",
-            array(':payload' => $token)
+            array(':payload' => $token, ':ip' => self::$WITH_CHECKIP ? Misc::getIP() : 'unchecked_ip')
         );
 
         return $rows_affected >= 1 ? true : false;
