@@ -144,7 +144,7 @@ class Database
         foreach ($options as $option) {
             switch ($option) {
                 case 'fetch_named':
-                    $db->setFetchMode(PDO::FETCH_NAMED);
+                    $db->setFetchMode(\PDO::FETCH_NAMED);
                     break;
             }
         }
