@@ -4,6 +4,7 @@ namespace Padcmoi\BundleApiSlim\Token;
 
 use Padcmoi\BundleApiSlim\Database;
 use Padcmoi\BundleApiSlim\Misc;
+use Padcmoi\BundleApiSlim\Token\DatabaseRequire;
 
 class CsrfToken
 {
@@ -105,4 +106,45 @@ class CsrfToken
         return $rows_affected >= 1 ? true : false;
     }
 
+    /**
+     * TODO
+     *
+     * @param {String} $token
+     *
+     * @return {Boolean}
+     */
+    public static function delete(string $token)
+    {
+        self::purge();
+
+        $rows_affected = Database::delete(
+            "DELETE FROM `__tokens`
+                WHERE `header` = 'csrf' AND `payload` = :payload AND `ip` = :ip AND
+                TIME_TO_SEC( TIMEDIFF(CURRENT_TIMESTAMP() , `expire_at`) ) < 0
+                LIMIT 1",
+            array(':payload' => $token, ':ip' => self::$WITH_CHECKIP ? Misc::getIP() : 'unchecked_ip')
+        );
+
+        return $rows_affected >= 1 ? true : false;
+    }
+
+    /**
+     * Doit fournir un jeton sinon on stop l'execution
+     *
+     * @param {String} $token
+     *
+     * @void
+     */
+    public static function protection(string $token)
+    {
+        self::purge();
+
+        // Le jeton n'existe pas donc on refuse et on halt
+        if (!self::check($token)) {
+            exit;
+        }
+
+        // Jeton utilisé donc on le supprime
+        self::delete($token);
+    }
 }
