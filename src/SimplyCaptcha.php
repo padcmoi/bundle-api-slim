@@ -13,7 +13,7 @@ class SimplyCaptcha
         'height' => 50,
         'quality' => 70,
         'char_available' => '24689?tykjf',
-        'font_type_path' => __DIR__ . '.\simplycaptcha.ttf',
+        'font_type_path' => __DIR__ . '/simplycaptcha.ttf',
     ];
 
     /**
@@ -28,9 +28,9 @@ class SimplyCaptcha
         $db->query("
             CREATE TABLE IF NOT EXISTS `__simply_captcha` (
                 `id` INT NOT NULL AUTO_INCREMENT,
-                `remote_ip` varchar(80) NOT NULL DEFAULT '',
+                `remote_ip` char(50) NOT NULL DEFAULT '',
                 `picture` blob,
-                `code` varchar(10) NOT NULL DEFAULT '',
+                `code` char(10) NOT NULL DEFAULT '',
                 `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `last_test` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 UNIQUE KEY `remote_ip` (`remote_ip`),
