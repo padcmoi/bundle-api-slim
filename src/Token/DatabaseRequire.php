@@ -19,9 +19,9 @@ class DatabaseRequire
         CREATE TABLE IF NOT EXISTS `__tokens` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `header` enum('jwt','csrf') NOT NULL,
-            `payload` varchar(300) NOT NULL,
+            `payload` varchar(64) NOT NULL,
             `uid` int(11) DEFAULT NULL,
-            `ip` varchar(300) DEFAULT NULL,
+            `ip` char(50) DEFAULT NULL,
             `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
             `not_before_renew` datetime NOT NULL DEFAULT '1970-01-01 00:00:00',
             `expire_at` datetime NOT NULL DEFAULT '1970-01-01 00:00:00',
