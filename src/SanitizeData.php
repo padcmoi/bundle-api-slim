@@ -120,7 +120,11 @@ class SanitizeData
             $requestMethod = self::requestMethod();
 
             foreach ($requestMethod as $key => $value) {
-                self::$DATA[$key] = self::searchKey(self::$IGNORE_KEY, $key) === -1 ? self::sanitize($value) : $value;
+                if (gettype($value) == 'string') {
+                    self::$DATA[$key] = self::searchKey(self::$IGNORE_KEY, $key) === -1 ? self::sanitize($value) : $value;
+                } else {
+                    self::$DATA[$key] = $value;
+                }
             }
 
             return self::$DATA;
