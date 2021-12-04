@@ -5,6 +5,26 @@ namespace Padcmoi\BundleApiSlim\Misc;
 trait ArrayTools
 {
     /**
+     * Convertit dans un array tous les entiers 0 ou 1 en boolean
+     * et les boolean formaté en string
+     * @param {array}
+     * @param {array}
+     *
+     * @return {array}
+     */
+    public static function convertInArrayValueToBool(array $array, array $keyToCheck = [])
+    {
+        return array_map(function ($obj) use ($keyToCheck) {
+            foreach ($keyToCheck as $key) {
+                if (isset($obj[$key])) {
+                    $obj[$key] = self::convertStrToBool($obj[$key]);
+                }
+            }
+            return $obj;
+        }, $array);
+    }
+
+    /**
      * Trie un tableau de valeurs ou de clés valeurs
      * @param {array}
      * @param {string} key
