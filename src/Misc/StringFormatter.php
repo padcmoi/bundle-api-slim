@@ -7,30 +7,30 @@ trait StringFormatter
     /**
      * Convertit un entier 0 ou 1 en boolean
      * et un boolean formaté en string
-     * @param {String}
+     * @param {*}
      *
      * @return {Boolean}
      */
-    public static function convertStrToBool(string $str)
+    public static function convertStrToBool($str)
     {
-        switch ($variable) {
+        switch ($str) {
             case '0':
-                $bool = false;
+                $str = false;
                 break;
             case '1':
-                $bool = true;
+                $str = true;
                 break;
             case 'false':
-                $bool = false;
+                $str = false;
                 break;
             case 'true':
-                $bool = true;
+                $str = true;
                 break;
             default:
-                $bool = false;
+                $str = true;
                 break;
         }
-        return $bool;
+        return $str;
     }
 
     /**
