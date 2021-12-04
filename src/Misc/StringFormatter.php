@@ -5,6 +5,35 @@ namespace Padcmoi\BundleApiSlim\Misc;
 trait StringFormatter
 {
     /**
+     * Convertit un entier 0 ou 1 en boolean
+     * et un boolean formaté en string
+     * @param {String}
+     *
+     * @return {Boolean}
+     */
+    public static function convertStrToBool(string $str)
+    {
+        switch ($variable) {
+            case '0':
+                $bool = false;
+                break;
+            case '1':
+                $bool = true;
+                break;
+            case 'false':
+                $bool = false;
+                break;
+            case 'true':
+                $bool = true;
+                break;
+            default:
+                $bool = false;
+                break;
+        }
+        return $bool;
+    }
+
+    /**
      * Formatter au format slugify
      * @param {String}
      *
