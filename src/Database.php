@@ -4,6 +4,7 @@ namespace Padcmoi\BundleApiSlim;
 
 class Database
 {
+    private static $charset = "utf8";
 
     /**
      * Créer une instance PDO
@@ -18,13 +19,11 @@ class Database
         if (!isset($_ENV['DB_USERNAME'])) {throw new \Exception('DB_USERNAME introuvable dans .env');}
         if (!isset($_ENV['DB_PASSWORD'])) {throw new \Exception('DB_PASSWORD introuvable dans .env');}
 
-        $db = new \PDO(
-            'mysql:host=' . $_ENV['DB_HOSTNAME'] . ';dbname=' . $_ENV['DB_DATABASE'] . ';charset=utf8;',
+        return new \PDO(
+            'mysql:host=' . $_ENV['DB_HOSTNAME'] . ';dbname=' . $_ENV['DB_DATABASE'] . ';charset=' . self::$charset . ';',
             $_ENV['DB_USERNAME'],
             $_ENV['DB_PASSWORD']
         );
-        $db->exec('SET NAMES utf8');
-        return $db;
     }
 
     /**
@@ -35,6 +34,30 @@ class Database
     public static function request()
     {
         return self::instance();
+    }
+
+    /**
+     * Set charset
+     * @param {String}
+     *
+     * @void
+     */
+    public static function charset(string $charset = "utf8")
+    {
+        switch (strtolower($charset)) {
+            case 'utf8':
+                self::$charset = "utf8";
+                break;
+            case 'utf8mb4':
+                self::$charset = "utf8mb4";
+                break;
+
+            default:
+                self::$charset = "utf8";
+                break;
+        }
+
+        self::request()->exec('SET NAMES ' . self::$charset);
     }
 
     /**
