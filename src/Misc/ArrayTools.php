@@ -5,6 +5,19 @@ namespace Padcmoi\BundleApiSlim\Misc;
 trait ArrayTools
 {
     /**
+     * Check si une propriété d'un objet existe et sa valeur a le bon typage
+     * @param {Array} $variable
+     * @param {String} $key
+     * @param {String} $mustBe
+     *
+     * @return {Boolean}
+     */
+    public static function objectHasProperty(array $variable, string $key, string $mustBe)
+    {
+        return isset($variable[$key]) && gettype($variable[$key]) === $mustBe ? true : false;
+    }
+
+    /**
      * Convertit dans un array tous les entiers 0 ou 1 en boolean
      * et les boolean formaté en string
      * @param {array}
