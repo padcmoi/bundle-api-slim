@@ -11,6 +11,16 @@ class CsrfToken
     private static $WITH_CHECKIP = false;
 
     /**
+     * Nom de la table contenant les jetons
+     *
+     * @return string
+     */
+    public static function customSqlTable()
+    {
+        return isset($_ENV['JWT_SQLTABLE']) ? $_ENV['JWT_SQLTABLE'] : '__tokens';
+    }
+
+    /**
      * Active la vérification d'IP
      * @param {Boolean} false - désactive la vérification des IP
      *
@@ -32,7 +42,7 @@ class CsrfToken
 
         $expire = isset($_ENV['JWT_EXPIRE']) ? intval($_ENV['JWT_EXPIRE']) : intval(self::EXPIRE);
         Database::delete(
-            "DELETE FROM `__tokens` WHERE `header` = 'csrf' AND TIME_TO_SEC( TIMEDIFF(CURRENT_TIMESTAMP() , `expire_at`) ) > 0"
+            "DELETE FROM `" . self::customSqlTable() . "` WHERE `header` = 'csrf' AND TIME_TO_SEC( TIMEDIFF(CURRENT_TIMESTAMP() , `expire_at`) ) > 0"
         );
     }
 
@@ -48,7 +58,7 @@ class CsrfToken
         $token = rtrim(strtr(base64_encode(bin2hex(random_bytes(5)) . time()), '+/', '-_'), '=');
 
         $lastInsertId = Database::insert(
-            "INSERT INTO `__tokens` SET
+            "INSERT INTO `" . self::customSqlTable() . "` SET
                 `payload` = :payload,
                 `header` = 'csrf',
                 `ip` = :ip,
@@ -76,7 +86,7 @@ class CsrfToken
         self::purge();
 
         $rows_affected = Database::update(
-            "UPDATE `__tokens` SET `expire_at` = DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 900 SECOND)
+            "UPDATE `" . self::customSqlTable() . "` SET `expire_at` = DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 900 SECOND)
             WHERE `header` = 'csrf' AND `payload` = :payload AND `ip` = :ip LIMIT 1",
             array(':payload' => $token, ':ip' => self::$WITH_CHECKIP ? Misc::getIP() : 'unchecked_ip')
         );
@@ -96,7 +106,7 @@ class CsrfToken
         self::purge();
 
         $rows_affected = Database::rowCount(
-            "SELECT * FROM `__tokens` WHERE
+            "SELECT * FROM `" . self::customSqlTable() . "` WHERE
                 `header` = 'csrf' AND `payload` = :payload AND `ip` = :ip AND
                 TIME_TO_SEC( TIMEDIFF(CURRENT_TIMESTAMP() , `expire_at`) ) < 0
                 LIMIT 1",
@@ -118,7 +128,7 @@ class CsrfToken
         self::purge();
 
         $rows_affected = Database::delete(
-            "DELETE FROM `__tokens`
+            "DELETE FROM `" . self::customSqlTable() . "`
                 WHERE `header` = 'csrf' AND `payload` = :payload AND `ip` = :ip AND
                 TIME_TO_SEC( TIMEDIFF(CURRENT_TIMESTAMP() , `expire_at`) ) < 0
                 LIMIT 1",

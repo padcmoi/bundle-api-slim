@@ -10,6 +10,16 @@ class JwtToken
     const EXPIRE = 3600;
 
     /**
+     * Nom de la table contenant les jetons
+     *
+     * @return string
+     */
+    public static function customSqlTable()
+    {
+        return isset($_ENV['JWT_SQLTABLE']) ? $_ENV['JWT_SQLTABLE'] : '__tokens';
+    }
+
+    /**
      * Instance une seule fois SimplyJWT
      *
      * @void
@@ -41,7 +51,7 @@ class JwtToken
 
         $expire = isset($_ENV['JWT_EXPIRE']) ? intval($_ENV['JWT_EXPIRE']) : intval(self::EXPIRE);
         Database::delete(
-            "DELETE FROM `__tokens` WHERE `header` = 'jwt' AND TIME_TO_SEC( TIMEDIFF(CURRENT_TIMESTAMP() , `expire_at`) ) > :exp",
+            "DELETE FROM `" . self::customSqlTable() . "` WHERE `header` = 'jwt' AND TIME_TO_SEC( TIMEDIFF(CURRENT_TIMESTAMP() , `expire_at`) ) > :exp",
             array(":exp" => $expire)
         );
     }
@@ -74,7 +84,7 @@ class JwtToken
         ]);
 
         $lastInsertId = Database::insert(
-            "INSERT INTO `__tokens` SET
+            "INSERT INTO `" . self::customSqlTable() . "` SET
                 `payload` = md5(:payload),
                 `header` = 'jwt',
                 `uid` = :uid,
@@ -144,7 +154,7 @@ class JwtToken
         $add_nbf = $checkNbf ? ' AND TIME_TO_SEC( TIMEDIFF(CURRENT_TIMESTAMP() , `not_before_renew`) ) > 0 ' : '';
 
         $result = Database::rowCount(
-            "SELECT * FROM `__tokens` WHERE
+            "SELECT * FROM `" . self::customSqlTable() . "` WHERE
                 `payload` = MD5(:payload) AND
                 `header` = 'jwt' AND
                 TIME_TO_SEC( TIMEDIFF(CURRENT_TIMESTAMP() , `expire_at`) ) < 0
