@@ -102,6 +102,23 @@ class JwtToken
     }
 
     /**
+     * Supprime un jeton
+     *
+     * @param String $serializedToken
+     *
+     * @void
+     */
+    public static function delete(string $serializedToken)
+    {
+        DatabaseRequire::check();
+
+        Database::delete(
+            "DELETE FROM `" . self::customSqlTable() . "` WHERE `header` = 'jwt' AND `payload` = md5(:token) LIMIT 1",
+            [":token" => $serializedToken]
+        );
+    }
+
+    /**
      * Renouvelle le jeton à condition que la valeur NBF soit dépassée
      * sinon retourne l'ancien jeton comme étant valide
      *
@@ -112,7 +129,9 @@ class JwtToken
     public static function tryRenew(string $serializedToken)
     {
         if (self::check($serializedToken, true)) {
-            return self::create(self::getUid($serializedToken));
+            $newToken = self::create(self::getUid($serializedToken));
+            self::delete($serializedToken); // Supprime l'ancien jeton
+            return $newToken;
         } else {
             return $serializedToken;
         }
