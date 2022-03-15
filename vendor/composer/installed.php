@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '823b500fd90eef1bcbdc6c45bc94b853c013eb4a',
+        'reference' => '426d595be77f195931c34a7b3d96ad4ee180147b',
         'name' => 'padcmoi/bundle-api-slim',
         'dev' => true,
     ),
@@ -25,7 +25,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '823b500fd90eef1bcbdc6c45bc94b853c013eb4a',
+            'reference' => '426d595be77f195931c34a7b3d96ad4ee180147b',
             'dev_requirement' => false,
         ),
         'padcmoi/simply-jwt' => array(
